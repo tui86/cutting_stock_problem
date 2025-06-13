@@ -1,14 +1,3 @@
-import subprocess
-import sys
-def install_module():
-    module_name="numpy"
-    try:    
-        __import__(module_name.replace("-", "_"))
-    except ImportError:
-        print(f"Chưa tìm thấy {module_name}. Đang tiến hành cài đặt...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", module_name])
-        print(f"{module_name} đã được cài đặt thành công!")
-install_module()
 import numpy as np
 import math
 def sapxep(chieudai, sothanh):
@@ -42,15 +31,8 @@ def taomatran(L, soluong, chieudai, sothanh):
         for k in range(i):
             matrancat[i][k]=0
         for j in range(i, len(chieudai)):
-            check=True
-            dem=0
-            while(check):
-                if copy_L>=chieudai[j]:
-                    copy_L-=chieudai[j]
-                    dem+=1
-                else:
-                    matrancat[i][j]=dem
-                    check=False
+            matrancat[i][j]=copy_L//chieudai[j]
+            copy_L=copy_L%chieudai[j]
     return matrancat
 def tinhtoan(L, soluong, chieudai, sothanh, matrancat):
     du=0
@@ -61,7 +43,7 @@ def tinhtoan(L, soluong, chieudai, sothanh, matrancat):
         tong=np.sum(matrancat[i]*chieudai)
         if matrancat[i][i]==0:
             continue
-        B=math.ceil(sothanh[i]/matrancat[i][i])
+        B=math.ceil(sothanh_copy[i]/matrancat[i][i])
         sothanhduocdungdecat[i]+=B
         sothanhduoccat+=B*matrancat[i]
         sothanh_copy-=B*matrancat[i]
